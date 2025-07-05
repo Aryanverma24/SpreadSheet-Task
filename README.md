@@ -54,17 +54,17 @@ This project is a **spreadsheet-style dashboard** built using **React + Vite**. 
 git clone https://github.com/your-username/react-spreadsheet-vite.git
 cd react-spreadsheet-vite
 ```
-#Install dependencies :
+# Install dependencies :
 
 npm install
 # or
 yarn install
 
-Start the development server : 
+# Start the development server : 
 
 npm run dev
 
-Open in browser :
+# Open in browser :
 
 
 
