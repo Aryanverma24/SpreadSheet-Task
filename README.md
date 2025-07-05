@@ -27,11 +27,10 @@ This project is a **spreadsheet-style dashboard** built using **React + Vite**. 
 ## 🖼️ Screenshots
 
 ### Main Dashboard
-![Main Spreadsheet Screenshot](./public/Screenshot%20(96).png)
+![Main Spreadsheet Screenshot](./screenshots/spreadsheet-main.png)
 
 ### Status Dropdown
-![Dropdown Example](./public/Screenshot%20(97).png)
-![DropDowm Example](./public/Screenshot%20(98).png)
+![Dropdown Example](./screenshots/status-dropdown.png)
 
 > 📂 Store screenshots in a folder called `/screenshots` in the root directory
 
