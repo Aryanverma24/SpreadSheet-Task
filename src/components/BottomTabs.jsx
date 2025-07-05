@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import  { useData } from '../Context/BottomFilter';
 
 const BottomTabs = () => {
-  const [activeTab, setActiveTab] = useState("All Orders");
+  const {activeTab, setActiveTab} = useData()
 
+  console.log(activeTab)
   const tabs = ["All Orders", "Arrived", "Reviewed", "Pending", "+"];
 
   return (

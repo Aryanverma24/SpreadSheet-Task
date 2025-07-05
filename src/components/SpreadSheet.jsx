@@ -1,26 +1,54 @@
-import React, { useState } from "react";
-import tableData from "../data/tableData.json";
+import { useData } from "../Context/BottomFilter";
 
 export default function SpreadsheetTable() {
-  const [columns] = useState(tableData.columns);
-  const [rows, setRows] = useState(tableData.rows);
+  const { sheetData, setSheetData, activeTab } = useData();
 
-  const extraCols = 40; // Extra blank columns like Excel
+  const extraCols = 40; // Extra blank columns
   const restrows = 50;  // Extra blank rows
 
   const updateCell = (rowIndex, colIndex, newValue) => {
-    const updatedRows = [...rows];
+    const updatedRows = [...sheetData.rows];
     if (!updatedRows[rowIndex]) updatedRows[rowIndex] = [];
     updatedRows[rowIndex][colIndex] = newValue;
-    setRows(updatedRows);
+
+    setSheetData(prev => ({
+      ...prev,
+      rows: updatedRows
+    }));
+  };
+
+  const tabToStatusMap = {
+    Reviewed: "In review",
+    Arrived: "Completed", // Or change based on your data
+    Pending: "Need to start",
+    // Add more if needed
+  };
+
+  const getFilteredRows = () => {
+    const allRows = sheetData.rows || [];
+
+    if (activeTab === "All Orders") {
+      return allRows.filter(row => Array.isArray(row));
+    }
+
+    const statusColIndex = sheetData.columns.findIndex(col => col === "Status");
+    if (statusColIndex === -1) return allRows;
+
+    const expectedStatus = tabToStatusMap[activeTab];
+    if (!expectedStatus) return allRows;
+
+    return allRows.filter(row => {
+      if (!Array.isArray(row)) return false;
+      const cell = row[statusColIndex];
+      return cell === expectedStatus;
+    });
   };
 
   const renderRow = (row = [], rIdx) => {
-    const totalCols = columns.length + extraCols;
+    const totalCols = sheetData.columns.length + extraCols;
 
     return (
-      <tr key={`row-${rIdx}`} >
-        {/* Row number */}
+      <tr key={`row-${rIdx}`}>
         <td
           className="px-2 py-1 border text-center text-gray-500 bg-gray-50 font-medium sticky left-0 z-10"
           style={{ backgroundColor: "#f9fafb", minWidth: "50px" }}
@@ -29,10 +57,9 @@ export default function SpreadsheetTable() {
         </td>
 
         {Array.from({ length: totalCols }).map((_, cIdx) => {
-          const value = row[cIdx] || "";
-          const colName = columns[cIdx]; // undefined for blank cols
+          const value = Array.isArray(row) ? row[cIdx] || "" : "";
+          const colName = sheetData?.columns[cIdx];
 
-          // Priority pill class
           let priorityClass = "";
           if (colName === "Priority") {
             if (value === "Low") priorityClass = "bg-blue-100 text-blue-700";
@@ -40,7 +67,6 @@ export default function SpreadsheetTable() {
             else if (value === "High") priorityClass = "bg-red-100 text-red-700";
           }
 
-          // Status pill class
           let statusClass = "";
           if (colName === "Status") {
             if (value === "Completed") statusClass = "bg-green-100 text-green-800";
@@ -51,11 +77,8 @@ export default function SpreadsheetTable() {
           }
 
           const pillClass =
-            colName === "Priority"
-              ? priorityClass
-              : colName === "Status"
-              ? statusClass
-              : "";
+            colName === "Priority" ? priorityClass :
+            colName === "Status" ? statusClass : "";
 
           return (
             <td
@@ -66,14 +89,10 @@ export default function SpreadsheetTable() {
               onBlur={(e) => updateCell(rIdx, cIdx, e.target.innerText)}
             >
               {(colName === "Priority" || colName === "Status") && value ? (
-                <span
-                  className={`px-1.5 py-0.5 rounded-full text-xs font-medium ${pillClass}`}
-                >
+                <span className={`px-1.5 py-0.5 rounded-full text-xs font-medium ${pillClass}`}>
                   {value}
                 </span>
-              ) : (
-                value
-              )}
+              ) : value}
             </td>
           );
         })}
@@ -81,13 +100,16 @@ export default function SpreadsheetTable() {
     );
   };
 
+  if (!sheetData || !sheetData.columns || !sheetData.rows) {
+    return <div className="p-4 text-2xl">Loading spreadsheet...</div>;
+  }
+
   return (
     <div className="overflow-x-auto border rounded-lg mt-1 max-h-[75vh] overflow-y-scroll">
       <div className="w-full overflow-auto">
         <table className="min-w-[1800px] text-xs text-left text-gray-800 border border-gray-300">
           <thead className="bg-gray-100 uppercase sticky top-0 z-20">
             <tr>
-              {/* Sticky row number header */}
               <th
                 className="px-2 py-1 border bg-white text-center sticky left-0 z-30"
                 style={{ backgroundColor: "#f9fafb", minWidth: "50px" }}
@@ -95,18 +117,16 @@ export default function SpreadsheetTable() {
                 #
               </th>
 
-              {/* Column headers */}
-              {columns.map((col, i) => (
+              {sheetData.columns.map((col, i) => (
                 <th
                   key={i}
-                  className="px-2 py-1 border  bg-gray-200 text-stone-950 font-semibold"
+                  className="px-2 py-1 border bg-gray-200 text-stone-950 font-semibold"
                   style={{ minWidth: "100px" }}
                 >
                   {col}
                 </th>
               ))}
 
-              {/* Extra column headers (empty) */}
               {Array.from({ length: extraCols }).map((_, i) => (
                 <th
                   key={`extra-col-${i}`}
@@ -118,12 +138,10 @@ export default function SpreadsheetTable() {
           </thead>
 
           <tbody>
-            {/* Actual data rows */}
-            {rows.map((row, rIdx) => renderRow(row, rIdx))}
+            {getFilteredRows().map((row, rIdx) => renderRow(row, rIdx))}
 
-            {/* Blank rows */}
             {Array.from({ length: restrows }).map((_, rIdx) =>
-              renderRow([], rows.length + rIdx)
+              renderRow([], sheetData.rows.length + rIdx)
             )}
           </tbody>
         </table>
