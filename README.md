@@ -1,12 +1,71 @@
-# React + Vite
+# 📊 React Spreadsheet Dashboard with Status Filtering
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a **spreadsheet-style dashboard** built using **React + Vite**. It simulates an Excel-like environment where users can:
 
-Currently, two official plugins are available:
+- Edit cells inline
+- Use colored dropdowns for statuses
+- Filter rows using tabs like "Reviewed", "Arrived", "Pending"
+- Add extra columns and rows dynamically
+- Seamlessly edit with Excel-like UX using `contentEditable` and dropdowns
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+![Vite + React](https://vitejs.dev/logo.svg)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🧩 Features
+
+✅ Spreadsheet-style layout  
+✅ Status & Priority color pills  
+✅ Dropdown-based status editing  
+✅ Real-time filtering via bottom tabs  
+✅ Fixed headers and row numbers  
+✅ Excel-like blank columns/rows  
+✅ Built with **TailwindCSS**, **Vite**, and **React Context**
+
+---
+
+## 🖼️ Screenshots
+
+### Main Dashboard
+![Main Spreadsheet Screenshot](./public/Screenshot%20(96).png)
+
+### Status Dropdown
+![Dropdown Example](./public/Screenshot%20(97).png)
+![DropDowm Example](./public/Screenshot%20(98).png)
+
+> 📂 Store screenshots in a folder called `/screenshots` in the root directory
+
+---
+
+## 🛠️ Tech Stack
+
+- **React** (with hooks and context)
+- **Vite** for blazing fast dev/build
+- **TailwindCSS** for responsive UI
+- **React Context** for global state
+- **ESLint + Prettier** (optional for formatting)
+
+---
+
+## 🏁 Getting Started
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/your-username/react-spreadsheet-vite.git
+cd react-spreadsheet-vite
+```
+2. Install dependencies :
+
+npm install
+ or
+yarn install
+
+3. Start the development server : 
+
+npm run dev
+
+4. Open in browser :
+
+
+
