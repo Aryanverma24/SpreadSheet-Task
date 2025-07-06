@@ -27,12 +27,10 @@ This project is a **spreadsheet-style dashboard** built using **React + Vite**. 
 ## 🖼️ Screenshots
 
 ### Main Dashboard
-
-![Main Spreadsheet Screenshot](<./public/Screenshot%20(96).png>)
+![Main Spreadsheet Screenshot](./public/Screenshot%20(96).png)
 
 ### Status Dropdown
-
-![Dropdown Example](<./public/Screenshot%20(97).png>)
+![Dropdown Example](./public/Screenshot%20(97).png)
 
 > 📂 Store screenshots in a folder called `/screenshots` in the root directory
 
@@ -68,3 +66,6 @@ yarn install
 npm run dev
 
 4. Open in browser :
+
+<a href="https://aryan-spreadsheet-react.netlify.app/"> Link </a>
+
