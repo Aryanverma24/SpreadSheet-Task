@@ -1,19 +1,19 @@
-import { useData } from "../Context/BottomFilter";
+import { useData } from "../Context/useData";
 
 export default function SpreadsheetTable() {
   const { sheetData, setSheetData, activeTab } = useData();
 
   const extraCols = 40; // Extra blank columns
-  const restrows = 50;  // Extra blank rows
+  const restrows = 50; // Extra blank rows
 
   const updateCell = (rowIndex, colIndex, newValue) => {
     const updatedRows = [...sheetData.rows];
     if (!updatedRows[rowIndex]) updatedRows[rowIndex] = [];
     updatedRows[rowIndex][colIndex] = newValue;
 
-    setSheetData(prev => ({
+    setSheetData((prev) => ({
       ...prev,
-      rows: updatedRows
+      rows: updatedRows,
     }));
   };
 
@@ -28,16 +28,18 @@ export default function SpreadsheetTable() {
     const allRows = sheetData.rows || [];
 
     if (activeTab === "All Orders") {
-      return allRows.filter(row => Array.isArray(row));
+      return allRows.filter((row) => Array.isArray(row));
     }
 
-    const statusColIndex = sheetData.columns.findIndex(col => col === "Status");
+    const statusColIndex = sheetData.columns.findIndex(
+      (col) => col === "Status",
+    );
     if (statusColIndex === -1) return allRows;
 
     const expectedStatus = tabToStatusMap[activeTab];
     if (!expectedStatus) return allRows;
 
-    return allRows.filter(row => {
+    return allRows.filter((row) => {
       if (!Array.isArray(row)) return false;
       const cell = row[statusColIndex];
       return cell === expectedStatus;
@@ -63,22 +65,32 @@ export default function SpreadsheetTable() {
           let priorityClass = "";
           if (colName === "Priority") {
             if (value === "Low") priorityClass = "bg-blue-100 text-blue-700";
-            else if (value === "Medium") priorityClass = "bg-yellow-100 text-yellow-800";
-            else if (value === "High") priorityClass = "bg-red-100 text-red-700";
+            else if (value === "Medium")
+              priorityClass = "bg-yellow-100 text-yellow-800";
+            else if (value === "High")
+              priorityClass = "bg-red-100 text-red-700";
           }
 
           let statusClass = "";
           if (colName === "Status") {
-            if (value === "Completed") statusClass = "bg-green-100 text-green-800";
-            else if (value === "In process") statusClass = "bg-yellow-100 text-yellow-800";
-            else if (value === "Need to start") statusClass = "bg-gray-100 text-gray-700";
-            else if (value === "In review") statusClass = "bg-purple-100 text-purple-700";
-            else if (value === "Blocked") statusClass = "bg-red-100 text-red-700";
+            if (value === "Completed")
+              statusClass = "bg-green-100 text-green-800";
+            else if (value === "In process")
+              statusClass = "bg-yellow-100 text-yellow-800";
+            else if (value === "Need to start")
+              statusClass = "bg-gray-100 text-gray-700";
+            else if (value === "In review")
+              statusClass = "bg-purple-100 text-purple-700";
+            else if (value === "Blocked")
+              statusClass = "bg-red-100 text-red-700";
           }
 
           const pillClass =
-            colName === "Priority" ? priorityClass :
-            colName === "Status" ? statusClass : "";
+            colName === "Priority"
+              ? priorityClass
+              : colName === "Status"
+                ? statusClass
+                : "";
 
           return (
             <td
@@ -89,10 +101,14 @@ export default function SpreadsheetTable() {
               onBlur={(e) => updateCell(rIdx, cIdx, e.target.innerText)}
             >
               {(colName === "Priority" || colName === "Status") && value ? (
-                <span className={`px-1.5 py-0.5 rounded-full text-xs font-medium ${pillClass}`}>
+                <span
+                  className={`px-1.5 py-0.5 rounded-full text-xs font-medium ${pillClass}`}
+                >
                   {value}
                 </span>
-              ) : value}
+              ) : (
+                value
+              )}
             </td>
           );
         })}
@@ -141,7 +157,7 @@ export default function SpreadsheetTable() {
             {getFilteredRows().map((row, rIdx) => renderRow(row, rIdx))}
 
             {Array.from({ length: restrows }).map((_, rIdx) =>
-              renderRow([], sheetData.rows.length + rIdx)
+              renderRow([], sheetData.rows.length + rIdx),
             )}
           </tbody>
         </table>
